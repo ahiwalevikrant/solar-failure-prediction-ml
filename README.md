@@ -9,6 +9,69 @@ The goal is to improve **solar farm reliability, reduce downtime, and enable pro
 
 ---
 
+## Quick Start
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Generate Sample Data & Train Models
+
+```bash
+python training/train.py
+```
+
+This will:
+- Generate synthetic solar panel data
+- Train the power prediction model (Random Forest)
+- Train the anomaly detector
+- Train the degradation detector
+- Save all models to `models/`
+
+### 3. Start the API Server
+
+```bash
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+
+Or simply:
+
+```bash
+python api/main.py
+```
+
+### 4. Use the API
+
+```bash
+# Predict power output
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "irradiance": 820,
+    "temperature": 35,
+    "humidity": 45,
+    "wind_speed": 5
+  }'
+
+# Detect anomalies
+curl -X POST "http://localhost:8000/detect_anomaly" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "irradiance": 820,
+    "temperature": 35,
+    "humidity": 45,
+    "wind_speed": 5,
+    "power_output": 300
+  }'
+
+# Health check
+curl "http://localhost:8000/health"
+```
+
+---
+
 ## Key Features
 
 * **Solar Power Prediction**
